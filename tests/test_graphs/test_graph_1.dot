@@ -1,0 +1,15 @@
+digraph {
+    0;
+    1;
+    2;
+    3;
+    4;
+    5;
+    0 -> 1 [key=0, label=Σ];
+    1 -> 2 [key=0, label=Σ];
+    2 -> 0 [key=0, label=Σ];
+    0 -> 3 [key=0, label=Λ];
+    3 -> 4 [key=0, label=Λ];
+    4 -> 5 [key=0, label=Λ];
+    5 -> 0 [key=0, label=Λ];
+}
