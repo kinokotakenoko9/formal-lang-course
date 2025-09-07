@@ -5,8 +5,9 @@ from project.graph_utils import (
     GraphInfo,
     _get_graph_info_by_graph,
     get_graph_info_by_name,
-    create_and_save_2_cycle_labeled_graph
+    create_and_save_2_cycle_labeled_graph,
 )
+
 
 def test__get_graph_info_by_graph():
     g = nx.MultiDiGraph()
@@ -19,11 +20,15 @@ def test__get_graph_info_by_graph():
     assert info["num_vertices"] == 3
     assert info["num_edges"] == 3
     assert info["labels"] == {"a", "b"}
-    assert GraphInfo(
-        num_vertices=3,
-        num_edges=3,
-        labels={"a", "b"},
-    ) == info
+    assert (
+        GraphInfo(
+            num_vertices=3,
+            num_edges=3,
+            labels={"a", "b"},
+        )
+        == info
+    )
+
 
 def test_get_graph_info_by_name():
     actual = get_graph_info_by_name("pizza")
@@ -57,6 +62,7 @@ def test_get_graph_info_by_name():
         },
     )
     assert actual == expected
+
 
 def test_create_and_save_2_cycle_labeled_graph(tmp_path: Path):
     filename = "test_graph_1.dot"
