@@ -39,7 +39,7 @@
 
 Полный балл: 5
 
-- [ ] Используя возможности [pyformlang](https://pyformlang.readthedocs.io/en/latest/) реализовать **функцию** построения минимального ДКА по заданному регулярному выражению. [Формат регулярного выражения](https://pyformlang.readthedocs.io/en/latest/usage.html#regular-expression).
+- [x] Используя возможности [pyformlang](https://pyformlang.readthedocs.io/en/latest/) реализовать **функцию** построения минимального ДКА по заданному регулярному выражению. [Формат регулярного выражения](https://pyformlang.readthedocs.io/en/latest/usage.html#regular-expression).
   - Требуемая функция:
   ```python
   def regex_to_dfa(regex: str) -> DeterministicFiniteAutomaton:

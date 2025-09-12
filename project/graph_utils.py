@@ -1,9 +1,15 @@
 from cfpq_data import download, graph_from_csv
 from cfpq_data.graphs.generators import labeled_two_cycles_graph
 from networkx import MultiDiGraph
-from typing import TypedDict
+from typing import Set, TypedDict
 import networkx as nx
 from networkx.drawing.nx_pydot import to_pydot
+
+from pyformlang.finite_automaton import (
+    DeterministicFiniteAutomaton,
+    NondeterministicFiniteAutomaton,
+)
+from pyformlang.regular_expression import Regex
 
 
 class GraphInfo(TypedDict):
@@ -40,3 +46,10 @@ def create_and_save_2_cycle_labeled_graph(
 
     pydot_graph = to_pydot(graph)
     pydot_graph.write_raw(path)
+
+
+def regex_to_dfa(regex: str) -> DeterministicFiniteAutomaton:
+    regex = Regex(regex)
+    e_nfa = regex.to_epsilon_nfa()
+    dfa = e_nfa.to_deterministic()
+    return dfa
