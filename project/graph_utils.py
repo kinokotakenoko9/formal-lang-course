@@ -50,6 +50,25 @@ def create_and_save_2_cycle_labeled_graph(
 
 def regex_to_dfa(regex: str) -> DeterministicFiniteAutomaton:
     regex = Regex(regex)
-    e_nfa = regex.to_epsilon_nfa()
-    dfa = e_nfa.to_deterministic()
+    enfa = regex.to_epsilon_nfa()
+    dfa = enfa.to_deterministic()
     return dfa
+
+
+def graph_to_nfa(
+    graph: MultiDiGraph, start_states: Set[int], final_states: Set[int]
+) -> NondeterministicFiniteAutomaton:
+    nfa = NondeterministicFiniteAutomaton.from_networkx(graph)
+    nodes = set(graph.nodes())
+
+    if start_states is None or len(start_states) == 0:
+        start_states = nodes
+    if final_states is None or len(final_states) == 0:
+        final_states = nodes
+
+    for n in start_states:
+        nfa.add_start_state(n)
+    for n in final_states:
+        nfa.add_final_state(n)
+
+    return nfa
