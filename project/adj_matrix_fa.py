@@ -1,9 +1,7 @@
 from typing import Dict, Iterable
 from networkx import MultiDiGraph
-import numpy as np
-from scipy.sparse import dok_matrix, csr_matrix, block_diag, kron, identity
+from scipy.sparse import dok_matrix, csr_matrix, kron, identity
 from pyformlang.finite_automaton import (
-    DeterministicFiniteAutomaton,
     NondeterministicFiniteAutomaton,
     Symbol,
     State,
@@ -41,15 +39,15 @@ class AdjacencyMatrixFA:
     ) -> Dict[Symbol, csr_matrix]:
         boolean_matrices_dok = {}
 
-        for u, l, v in nfa:
+        for u, symbol, v in nfa:
             # add new symbols
-            if l.value not in boolean_matrices_dok:
-                boolean_matrices_dok[l.value] = dok_matrix(
+            if symbol.value not in boolean_matrices_dok:
+                boolean_matrices_dok[symbol.value] = dok_matrix(
                     (self.num_states, self.num_states), dtype=bool
                 )
 
             # mark transition
-            boolean_matrices_dok[l.value][
+            boolean_matrices_dok[symbol.value][
                 self.states_to_idx[u], self.states_to_idx[v]
             ] = True
 
