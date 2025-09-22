@@ -8,6 +8,7 @@ from networkx.drawing.nx_pydot import to_pydot
 from pyformlang.finite_automaton import (
     DeterministicFiniteAutomaton,
     NondeterministicFiniteAutomaton,
+    State,
 )
 from pyformlang.regular_expression import Regex
 
@@ -52,13 +53,15 @@ def regex_to_dfa(regex: str) -> DeterministicFiniteAutomaton:
     regex = Regex(regex)
     enfa = regex.to_epsilon_nfa()
     dfa = enfa.to_deterministic()
-    return dfa
+    return dfa.minimize()
 
 
 def graph_to_nfa(
     graph: MultiDiGraph, start_states: Set[int], final_states: Set[int]
 ) -> NondeterministicFiniteAutomaton:
-    nfa = NondeterministicFiniteAutomaton.from_networkx(graph)
+    nfa = NondeterministicFiniteAutomaton.from_networkx(
+        graph
+    ).remove_epsilon_transitions()
     nodes = set(graph.nodes())
 
     if start_states is None or len(start_states) == 0:
@@ -67,8 +70,8 @@ def graph_to_nfa(
         final_states = nodes
 
     for n in start_states:
-        nfa.add_start_state(n)
+        nfa.add_start_state(State(n))
     for n in final_states:
-        nfa.add_final_state(n)
+        nfa.add_final_state(State(n))
 
     return nfa
