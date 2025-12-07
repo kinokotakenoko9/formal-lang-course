@@ -78,7 +78,3 @@ NUM
 CHAR
     : '"' [a-z] '"'
     ;
-
-WS
-    : [ \t\r\n]+ -> skip
-    ;
