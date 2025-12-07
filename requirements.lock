@@ -13,6 +13,7 @@ antlerinator==1!3.0.0
     # via grammarinator
 antlr4-python3-runtime==4.13.1
     # via grammarinator
+antlr4-tools==0.2.2
 autopep8==2.3.1
     # via grammarinator
 certifi==2024.7.4
@@ -38,6 +39,8 @@ inators==2.1.0
     # via grammarinator
 iniconfig==2.0.0
     # via pytest
+install-jdk==1.1.0
+    # via antlr4-tools
 isodate==0.6.1
     # via rdflib
 jinja2==3.1.4
