@@ -1,5 +1,4 @@
 from antlr4 import CommonTokenStream, InputStream, ParserRuleContext
-from antlr4.error.ErrorListener import ErrorListener
 
 from project.GraphQueryLexer import GraphQueryLexer
 from project.GraphQueryParser import GraphQueryParser
