@@ -1,5 +1,8 @@
 from networkx import MultiDiGraph
-from adj_matrix_fa import *
+
+from project.adj_matrix_fa import AdjacencyMatrixFA
+from project.graph_utils import graph_to_nfa, regex_to_dfa
+from scipy.sparse import dok_matrix, csr_matrix
 
 
 def ms_bfs_based_rpq(
