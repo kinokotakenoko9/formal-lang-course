@@ -1,6 +1,5 @@
 import networkx as nx
 import pyformlang
-from pyformlang.cfg import CFG
 from pyformlang.finite_automaton import NondeterministicFiniteAutomaton, State
 from pyformlang.rsa import RecursiveAutomaton
 from scipy import sparse
