@@ -25,7 +25,7 @@ class AdjacencyMatrixFA:
         self.final_states = nfa.final_states
 
         self.num_states = len(nfa.states)
-        states = sorted(list(nfa.states), key=lambda s: s.value)
+        states = sorted(list(nfa.states), key=lambda s: str(s.value))
         # map states to 0..<num_states
         self.states_to_idx = {s: i for i, s in enumerate(states)}
         self.idx_to_states = {i: s for i, s in enumerate(states)}
