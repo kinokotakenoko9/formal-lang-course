@@ -1,7 +1,10 @@
+from typing import Set
+
 import networkx as nx
 import pyformlang
 from pyformlang.cfg import CFG, Variable, Terminal, Production, Epsilon
 from collections import deque
+from scipy.sparse import csr_matrix
 
 
 def cfg_to_weak_normal_form(cfg: pyformlang.cfg.CFG) -> pyformlang.cfg.CFG:
@@ -106,3 +109,64 @@ def hellings_based_cfpq(
                 result_pairs.add((u, v))
 
     return result_pairs
+
+
+def matrix_based_cfpq(
+    cfg: pyformlang.cfg.CFG,
+    graph: nx.DiGraph,
+    start_nodes: Set[int] = None,
+    final_nodes: Set[int] = None,
+) -> set[tuple[int, int]]:
+    wcnf = cfg_to_weak_normal_form(cfg)
+    node_to_idx = {n: i for i, n in enumerate(graph.nodes)}
+    idx_to_node = {i: n for n, i in node_to_idx.items()}
+    n = graph.number_of_nodes()
+
+    boolean_decomposition = {v: csr_matrix((n, n), dtype=bool) for v in wcnf.variables}
+
+    if start_nodes is None:
+        start_nodes = set(graph.nodes)
+    if final_nodes is None:
+        final_nodes = set(graph.nodes)
+
+    for u, v, data in graph.edges(data=True):
+        label = data.get("label")
+        if label is None:
+            continue
+
+        for prod in wcnf.productions:
+            if (
+                len(prod.body) == 1
+                and isinstance(prod.body[0], Terminal)
+                and prod.body[0].value == label
+            ):
+                boolean_decomposition[prod.head][node_to_idx[u], node_to_idx[v]] = True
+
+    for var in wcnf.get_nullable_symbols():
+        boolean_decomposition[var].setdiag(True)
+
+    binary_productions = [p for p in wcnf.productions if len(p.body) == 2]
+    changed = True
+    while changed:
+        changed = False
+        for prod in binary_productions:
+            A = prod.head
+            B, C = prod.body[0], prod.body[1]
+
+            prev_nnz = boolean_decomposition[A].nnz
+            boolean_decomposition[A] = (
+                boolean_decomposition[A]
+                + boolean_decomposition[B] @ boolean_decomposition[C]
+            )
+            boolean_decomposition[A].eliminate_zeros()
+
+            if boolean_decomposition[A].nnz > prev_nnz:
+                changed = True
+
+    result = set()
+    for i, j in zip(*boolean_decomposition[wcnf.start_symbol].nonzero()):
+        u, v = idx_to_node[i], idx_to_node[j]
+        if u in start_nodes and v in final_nodes:
+            result.add((u, v))
+
+    return result
