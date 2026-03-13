@@ -148,3 +148,12 @@ _minted-presentation/
 
 # MacOS
 .DS_Store
+
+# ANTLR4
+
+**/.antlr
+*.interp
+*.tokens
+**/GraphQueryLexer.py
+**/GraphQueryVisitor.py
+**/GraphQueryParser.py
